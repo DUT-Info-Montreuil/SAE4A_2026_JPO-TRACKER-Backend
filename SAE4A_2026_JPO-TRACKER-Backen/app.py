@@ -1,12 +1,3 @@
-from flask import Flask
+from controllers.auth_controller import auth_bp
 
-app = Flask(__name__)
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
-
-if __name__ == '__main__':
-    app.run()
+app.register_blueprint(auth_bp, url_prefix="/auth")
