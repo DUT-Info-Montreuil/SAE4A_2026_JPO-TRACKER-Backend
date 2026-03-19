@@ -7,13 +7,11 @@ service = visiteur_service()
 
 @visiteur_bp.route("/", methods=["GET"])
 def get_all():
-    """GET /visiteurs/ - Liste résumée de tous les visiteurs"""
     return jsonify(service.get_all()), 200
 
 
 @visiteur_bp.route("/<visiteur_id>", methods=["GET"])
 def get_one(visiteur_id):
-    """GET /visiteurs/<id> - Détail complet d'un visiteur"""
     visiteur = service.get_by_id(visiteur_id)
     if not visiteur:
         return jsonify({"error": "Visiteur non trouvé"}), 404
@@ -22,7 +20,6 @@ def get_one(visiteur_id):
 
 @visiteur_bp.route("/", methods=["POST"])
 def create():
-    """POST /visiteurs/ - Créer un nouveau visiteur"""
     data = request.get_json()
     if not data:
         return jsonify({"error": "Corps de requête manquant"}), 400
@@ -36,7 +33,6 @@ def create():
 
 @visiteur_bp.route("/<visiteur_id>", methods=["PUT"])
 def update(visiteur_id):
-    """PUT /visiteurs/<id> - Mettre à jour un visiteur"""
     data = request.get_json()
     if not data:
         return jsonify({"error": "Corps de requête manquant"}), 400
@@ -48,7 +44,6 @@ def update(visiteur_id):
 
 @visiteur_bp.route("/<visiteur_id>", methods=["DELETE"])
 def delete(visiteur_id):
-    """DELETE /visiteurs/<id> - Supprimer un visiteur"""
     success = service.delete(visiteur_id)
     if not success:
         return jsonify({"error": "Visiteur non trouvé"}), 404

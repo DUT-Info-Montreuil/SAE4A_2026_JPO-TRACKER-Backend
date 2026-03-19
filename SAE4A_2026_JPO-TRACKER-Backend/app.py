@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from extension import mongo
-from controler.visiteur_controler import user_bp
+from controler.visiteur_controler import visiteur_bp
 
 def create_app():
     app = Flask(__name__)
@@ -11,7 +11,7 @@ def create_app():
     mongo.init_app(app)
 
     # Register blueprints
-    app.register_blueprint(user_bp)
+    app.register_blueprint(visiteur_bp)
 
     return app
 
