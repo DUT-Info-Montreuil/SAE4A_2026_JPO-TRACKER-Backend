@@ -20,3 +20,10 @@ def create():
     data = request.get_json()
     new_id = user_service.create(data)
     return jsonify({"id": new_id}), 201
+
+@user_bp.route("/<user_id>", methods=["DELETE"])
+def delete(user_id):
+    success = user_service.delete(user_id)
+    if not success:
+        return jsonify({"error": "Non trouvé"}), 404
+    return jsonify({"message": "Supprimé"}), 200
