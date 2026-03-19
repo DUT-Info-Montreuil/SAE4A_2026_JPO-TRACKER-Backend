@@ -1,7 +1,20 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask
+from config import Config
+from extension import mongo
+from controller import user_bp
 
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-app = Flask(__name__)
+    # Init extensions
+    mongo.init_app(app)
 
-if __name__ == '__main__':
+    # Register blueprints
+    app.register_blueprint(user_bp)
+
+    return app
+
+if __name__ == "__main__":
+    app = create_app()
     app.run()
