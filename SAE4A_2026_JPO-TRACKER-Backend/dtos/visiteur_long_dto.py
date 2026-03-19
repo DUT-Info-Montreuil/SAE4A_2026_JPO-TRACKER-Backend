@@ -1,5 +1,4 @@
 class VisiteurLongDTO:
-    """DTO complet : détail d'un visiteur"""
     def __init__(self, data: dict):
         self.id = data.get("id")
         self.nom = data.get("nom")

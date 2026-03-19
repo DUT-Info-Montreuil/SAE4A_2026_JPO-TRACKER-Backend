@@ -1,5 +1,4 @@
 class VisiteurShortDTO:
-    """DTO résumé : liste des visiteurs"""
     def __init__(self, id, nom, prenom, email, formation_interessee, evenement, statut):
         self.id = id
         self.nom = nom
