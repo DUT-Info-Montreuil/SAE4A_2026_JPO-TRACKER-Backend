@@ -6,6 +6,7 @@ class VisiteurLongDTO:
         self.email = data.get("email")
         self.telephone = data.get("telephone")
         self.date_de_naissance = data.get("date_de_naissance")
+        self.situation_particulier = data.get("situation_particulier")
         self.formation_origine = data.get("formation_origine", {})
         self.etablissement_origine = data.get("etablissement_origine", {})
         self.adresse = data.get("adresse", {})
@@ -23,6 +24,7 @@ class VisiteurLongDTO:
             "email": self.email,
             "telephone": self.telephone,
             "date_de_naissance": self.date_de_naissance,
+            "situation_particulier": self.situation_particulier,
             "formation_origine": self.formation_origine,
             "etablissement_origine": self.etablissement_origine,
             "adresse": self.adresse,
@@ -31,4 +33,24 @@ class VisiteurLongDTO:
             "immersion": self.immersion,
             "rgpd": self.rgpd,
             "meta": self.meta
+        }
+class VisiteurShortDTO:
+    def __init__(self, id, nom, prenom, email, formation_interessee, evenement, statut):
+        self.id = id
+        self.nom = nom
+        self.prenom = prenom
+        self.email = email
+        self.formation_interessee = formation_interessee
+        self.evenement = evenement
+        self.statut = statut
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nom": self.nom,
+            "prenom": self.prenom,
+            "email": self.email,
+            "formation_interessee": self.formation_interessee,
+            "evenement": self.evenement,
+            "statut": self.statut
         }

@@ -1,8 +1,8 @@
 from extension import mongo
 from bson import ObjectId
 from datetime import datetime, timezone
-from dtos.visiteur_short_dto import VisiteurShortDTO
-from dtos.visiteur_long_dto import VisiteurLongDTO
+from dtos.visiteur_dto import VisiteurShortDTO
+from dtos.visiteur_dto import VisiteurLongDTO
 
 
 def _map_short(u):
@@ -36,7 +36,7 @@ def _map_long(u):
     }).to_dict()
 
 
-class visiteur_service:
+class VisiteurService:
 
     def get_all(self):
         visiteurs = mongo.db.visiteurs.find()
@@ -48,6 +48,10 @@ class visiteur_service:
             return None
         return _map_long(u)
 
+    def get_by_dept(self, dept):
+        visiteurs = mongo.db.visiteurs.find({"dept": dept})
+        return [_map_short(u) for u in visiteurs]
+
     def create(self, data):
         now = datetime.now(timezone.utc)
         document = {
@@ -56,6 +60,7 @@ class visiteur_service:
             "email": data["email"],
             "telephone": data.get("telephone", ""),
             "date_de_naissance": data.get("date_de_naissance"),
+            "situation_particulier": data.get("situation_particulier", False),
             "formation_origine": data.get("formation_origine", {}),
             "établisement_d'origine": data.get("etablissement_origine", {}),
             "adresse": data.get("adresse", {}),
