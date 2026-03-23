@@ -29,10 +29,7 @@ dist/
 
 # Flask instance folder
 instance/
-
-# SQLite database (si tu utilises SQLite)
-*.db
-*.sqlite3
-
-# Environment variables
-.env
+.iml
+.xml
+.venv
+.idea
