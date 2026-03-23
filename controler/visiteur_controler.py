@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
-from service.visiteur_service import visiteur_service
+from service.visiteur_service import VisiteurService
 
 visiteur_bp = Blueprint("visiteurs", __name__, url_prefix="/visiteurs")
-service = visiteur_service()
+service = VisiteurService()
 
 
 @visiteur_bp.route("/", methods=["GET"])
@@ -16,6 +16,9 @@ def get_one(visiteur_id):
     if not visiteur:
         return jsonify({"error": "Visiteur non trouvé"}), 404
     return jsonify(visiteur), 200
+@visiteur_bp.route("/<dept>", methods=["GET"])
+def get_dept(dept):
+    return jsonify(service.get_by_depts(dept)), 200
 
 
 @visiteur_bp.route("/", methods=["POST"])
