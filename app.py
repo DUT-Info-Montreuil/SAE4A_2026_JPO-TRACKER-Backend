@@ -3,6 +3,7 @@ from config import Config
 from extension import mongo
 from controler.visiteur_controler import visiteur_bp
 from controler.export_controler import export_bp
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
@@ -10,6 +11,9 @@ def create_app():
 
     # Init extensions
     mongo.init_app(app)
+
+    
+    CORS(app)
 
     # Register blueprints
     app.register_blueprint(visiteur_bp)
