@@ -1,0 +1,8 @@
+import os
+from dotenv import load_dotenv
+
+
+class Config:
+
+    MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/"
+                                            "jpo-tracker")
