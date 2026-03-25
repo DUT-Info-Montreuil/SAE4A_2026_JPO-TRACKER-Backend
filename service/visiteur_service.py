@@ -1,4 +1,4 @@
-from extension import mongo
+﻿from extension import mongo
 from bson import ObjectId
 from datetime import datetime, timezone
 from dtos.visiteur_dto import VisiteurShortDTO
@@ -25,8 +25,9 @@ def _map_long(u):
         "email": u.get("email", ""),
         "telephone": u.get("telephone", ""),
         "date_de_naissance": u.get("date_de_naissance"),
+        "situation_particulier": u.get("situation_particulier", False),
         "formation_origine": u.get("formation_origine", {}),
-        "etablissement_origine": u.get("établisement_d'origine", {}),
+        "etablissement_origine": u.get("etablissement_origine", {}),
         "adresse": u.get("adresse", {}),
         "formation_interessee": u.get("formation_interessee", ""),
         "evenement": u.get("evenement", {}),
@@ -62,7 +63,7 @@ class VisiteurService:
             "date_de_naissance": data.get("date_de_naissance"),
             "situation_particulier": data.get("situation_particulier", False),
             "formation_origine": data.get("formation_origine", {}),
-            "établisement_d'origine": data.get("etablissement_origine", {}),
+            "etablissement_origine": data.get("etablissement_origine", {}),
             "adresse": data.get("adresse", {}),
             "formation_interessee": data.get("formation_interessee", ""),
             "evenement": data.get("evenement", {}),
