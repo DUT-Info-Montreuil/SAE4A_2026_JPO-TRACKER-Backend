@@ -39,8 +39,29 @@ def _map_long(u):
 
 class VisiteurService:
 
-    def get_all(self):
-        visiteurs = mongo.db.visiteurs.find()
+
+    def get_all(self, search=None, departement=None, formation_origine=None, reorientation=False,
+                situation_particuliere=False):
+        query = {}
+
+        if search:
+            regex = {"$regex": search, "$options": "i"}
+            query["$or"] = [
+                {"nom": regex},
+                {"prenom": regex},
+                {"email": regex}
+            ]
+
+        if departement:
+            query["formation_interessee"] = departement
+        if formation_origine:
+            query["formation_origine.type"] = formation_origine
+        if reorientation:
+            query["formation_origine.type"] = "reorientation"
+        if situation_particuliere:
+            query["situation_particulier"] = True
+
+        visiteurs = mongo.db.visiteurs.find(query)
         return [_map_short(u) for u in visiteurs]
 
     def get_by_id(self, visiteur_id):

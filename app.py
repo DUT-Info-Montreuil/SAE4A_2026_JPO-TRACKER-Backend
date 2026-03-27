@@ -7,7 +7,7 @@ from controler.visiteur_controler import visiteur_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    CORS(app, resources={r"/*": {"origins": "http://localhost:5174"}})
+    CORS(app)
 
     # Init extensions
     mongo.init_app(app)
