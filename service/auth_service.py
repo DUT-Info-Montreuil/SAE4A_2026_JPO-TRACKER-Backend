@@ -27,6 +27,9 @@ class AuthService:
         return mongo.db.admin.find_one({"role": "admin"})
 
     def initialiser(self):
+        print("initialiser appelé")
+        admin = self._get_admin()
+        print("admin existant:", admin)
         if not self._get_admin():
             mdp_hash = bcrypt.hashpw("admin123".encode(), bcrypt.gensalt())
             mongo.db.admin.insert_one({
@@ -37,6 +40,7 @@ class AuthService:
                     "updated_at": datetime.now(timezone.utc)
                 }
             })
+            print("admin créé avec id:", result.inserted_id)
 
     def login(self, mot_de_passe):
         admin = self._get_admin()
