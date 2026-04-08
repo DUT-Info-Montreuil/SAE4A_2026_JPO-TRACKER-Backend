@@ -1,4 +1,4 @@
-from extension import mongo
+﻿from extension import mongo
 from bson import ObjectId
 from datetime import datetime, timezone
 from dtos.visiteur_dto import VisiteurShortDTO
@@ -25,8 +25,9 @@ def _map_long(u):
         "email": u.get("email", ""),
         "telephone": u.get("telephone", ""),
         "date_de_naissance": u.get("date_de_naissance"),
+        "situation_particulier": u.get("situation_particulier", False),
         "formation_origine": u.get("formation_origine", {}),
-        "etablissement_origine": u.get("établisement_d'origine", {}),
+        "etablissement_origine": u.get("etablissement_origine", {}),
         "adresse": u.get("adresse", {}),
         "formation_interessee": u.get("formation_interessee", ""),
         "evenement": u.get("evenement", {}),
@@ -38,9 +39,46 @@ def _map_long(u):
 
 class VisiteurService:
 
+
     def get_all(self):
         visiteurs = mongo.db.visiteurs.find()
         return [_map_short(u) for u in visiteurs]
+
+    def get_filtrer(self, search=None, departement=None, formation_origine=None, reorientation=False,
+                    situation_particuliere=False, page=1, limit=10):
+        query = {}
+
+        if search:
+            regex = {"$regex": search, "$options": "i"}
+            query["$or"] = [
+                {"nom": regex},
+                {"prenom": regex},
+                {"email": regex}
+            ]
+
+        if departement:
+            query["formation_interessee"] = departement
+        if formation_origine:
+            query["formation_origine.type"] = formation_origine
+        if reorientation:
+            query["formation_origine.type"] = "reorientation"
+        if situation_particuliere:
+            query["situation_particulier"] = True
+
+        return self.pagination(query, page, limit)
+
+
+    def pagination(self, query, page, limit):
+        total_visiteur: int = mongo.db.visiteurs.count_documents(query)
+        prendre_a_partir_de: int = max(page - 1, 0) * limit
+        visiteurs = (
+            mongo.db.visiteurs.find(query)
+            .sort("_id", -1)
+            .skip(prendre_a_partir_de)
+            .limit(limit)
+        )
+        return [_map_short(u) for u in visiteurs], total_visiteur
+
 
     def get_by_id(self, visiteur_id):
         u = mongo.db.visiteurs.find_one({"_id": ObjectId(visiteur_id)})
@@ -62,7 +100,7 @@ class VisiteurService:
             "date_de_naissance": data.get("date_de_naissance"),
             "situation_particulier": data.get("situation_particulier", False),
             "formation_origine": data.get("formation_origine", {}),
-            "établisement_d'origine": data.get("etablissement_origine", {}),
+            "etablissement_origine": data.get("etablissement_origine", {}),
             "adresse": data.get("adresse", {}),
             "formation_interessee": data.get("formation_interessee", ""),
             "evenement": data.get("evenement", {}),

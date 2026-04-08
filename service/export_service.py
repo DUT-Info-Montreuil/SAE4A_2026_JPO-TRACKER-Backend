@@ -5,8 +5,26 @@ from extension import mongo
 
 class ExportService:
 
-    def export_visiteurs_csv(self) -> str:
-        visiteurs = mongo.db.visiteurs.find()
+    def export_visiteurs_csv(self, search=None, departement=None, formation_origine=None, reorientation=False, situation_particuliere=False) -> str:
+        query = {}
+
+        if search:
+            regex = {"$regex": search, "$options": "i"}
+            query["$or"] = [
+                {"nom": regex},
+                {"prenom": regex},
+                {"email": regex}
+            ]
+        if departement:
+            query["formation_interessee"] = departement
+        if formation_origine:
+            query["formation_origine.type"] = formation_origine
+        if reorientation:
+            query["formation_origine.type"] = "reorientation"
+        if situation_particuliere:
+            query["situation_particulier"] = True
+
+        visiteurs = mongo.db.visiteurs.find(query)
 
         output = io.StringIO()
         writer = csv.writer(output)
