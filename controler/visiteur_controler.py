@@ -86,3 +86,9 @@ def delete(visiteur_id):
     if not success:
         return jsonify({"error": "Visiteur non trouvÃ©"}), 404
     return jsonify({"message": "Visiteur supprimÃ©"}), 200
+
+
+@visiteur_bp.route("/", methods=["DELETE"])
+def delete_all():
+    service.delete_all()
+    return jsonify({"message": "Tous les visiteurs ont été supprimes"}), 200
