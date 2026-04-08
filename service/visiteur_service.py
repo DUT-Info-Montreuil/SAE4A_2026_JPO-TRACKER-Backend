@@ -69,6 +69,20 @@ class VisiteurService:
 
         visiteurs = mongo.db.visiteurs.find(query)
         return [_map_long(u) for u in visiteurs]
+        return self.pagination(query, page, limit)
+
+
+    def pagination(self, query, page, limit):
+        total_visiteur: int = mongo.db.visiteurs.count_documents(query)
+        prendre_a_partir_de: int = max(page - 1, 0) * limit
+        visiteurs = (
+            mongo.db.visiteurs.find(query)
+            .sort("_id", -1)
+            .skip(prendre_a_partir_de)
+            .limit(limit)
+        )
+        return [_map_short(u) for u in visiteurs], total_visiteur
+
 
     def get_by_id(self, visiteur_id):
         u = mongo.db.visiteurs.find_one({"_id": ObjectId(visiteur_id)})
