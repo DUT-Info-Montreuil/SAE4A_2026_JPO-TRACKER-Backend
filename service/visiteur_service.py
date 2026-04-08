@@ -47,7 +47,7 @@ class VisiteurService:
         return [_map_long(u) for u in visiteurs]
 
     def get_filtered(self, search=None, departement=None, formation_origine=None, reorientation=False,
-                situation_particuliere=False):
+                    situation_particuliere=False, page=1, limit=10):
         query = {}
 
         if search:
@@ -67,10 +67,7 @@ class VisiteurService:
         if situation_particuliere:
             query["situation_particulier"] = True
 
-        visiteurs = mongo.db.visiteurs.find(query)
-        return [_map_long(u) for u in visiteurs]
         return self.pagination(query, page, limit)
-
 
     def pagination(self, query, page, limit):
         total_visiteur: int = mongo.db.visiteurs.count_documents(query)

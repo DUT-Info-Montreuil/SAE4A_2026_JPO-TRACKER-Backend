@@ -13,8 +13,8 @@ def get_all():
 def get_all_full():
     return jsonify(service.get_all_full()), 200
 
-@visiteur_bp.route("/<filter>", methods=["GET"])
-def get_filtered(filter):
+@visiteur_bp.route("/filtered", methods=["GET"])
+def get_filtered():
     search = request.args.get("search")
     departement = request.args.get("departement")
     formation_origine = request.args.get("formationOrigine")
@@ -22,7 +22,7 @@ def get_filtered(filter):
     situation_particuliere = request.args.get("situationParticuliere") == "true"
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 10))
-    visiteurs, total = service.get_filtrer(
+    visiteurs, total = service.get_filtered(
         search,
         departement,
         formation_origine,
