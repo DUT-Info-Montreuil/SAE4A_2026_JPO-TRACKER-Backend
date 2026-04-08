@@ -7,13 +7,20 @@ service = VisiteurService()
 
 @visiteur_bp.route("/", methods=["GET"])
 def get_all():
+    return jsonify(service.get_all()), 200
+
+@visiteur_bp.route("/full", methods=["GET"])
+def get_all_full():
+    return jsonify(service.get_all_full()), 200
+
+@visiteur_bp.route("/<filter>", methods=["GET"])
+def get_filtered(filter):
     search = request.args.get("search")
     departement = request.args.get("departement")
     formation_origine = request.args.get("formationOrigine")
     reorientation = request.args.get("reorientation") == "true"
     situation_particuliere = request.args.get("situationParticuliere") == "true"
     return jsonify(service.get_all(search, departement, formation_origine, reorientation, situation_particuliere)), 200
-
 
 @visiteur_bp.route("/<visiteur_id>", methods=["GET"])
 def get_one(visiteur_id):

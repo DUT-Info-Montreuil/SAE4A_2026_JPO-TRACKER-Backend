@@ -38,9 +38,15 @@ def _map_long(u):
 
 
 class VisiteurService:
+    def get_all(self):
+        visiteurs = mongo.db.visiteurs.find()
+        return [_map_short(u) for u in visiteurs]
 
+    def get_all_full(self):
+        visiteurs = mongo.db.visiteurs.find()
+        return [_map_long(u) for u in visiteurs]
 
-    def get_all(self, search=None, departement=None, formation_origine=None, reorientation=False,
+    def get_filtered(self, search=None, departement=None, formation_origine=None, reorientation=False,
                 situation_particuliere=False):
         query = {}
 
@@ -62,7 +68,7 @@ class VisiteurService:
             query["situation_particulier"] = True
 
         visiteurs = mongo.db.visiteurs.find(query)
-        return [_map_short(u) for u in visiteurs]
+        return [_map_long(u) for u in visiteurs]
 
     def get_by_id(self, visiteur_id):
         u = mongo.db.visiteurs.find_one({"_id": ObjectId(visiteur_id)})
