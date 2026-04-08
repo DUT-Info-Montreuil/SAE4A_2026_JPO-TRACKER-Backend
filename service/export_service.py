@@ -1,0 +1,93 @@
+import csv
+import io
+from extension import mongo
+
+
+class ExportService:
+
+    def _build_query(self, search=None, departement=None, formation_origine=None, reorientation=False, situation_particuliere=False):
+        query = {}
+
+        if search:
+            regex = {"$regex": search, "$options": "i"}
+            query["$or"] = [
+                {"nom": regex},
+                {"prenom": regex},
+                {"email": regex}
+            ]
+        if departement:
+            query["formation_interessee"] = departement
+        if formation_origine:
+            query["formation_origine.type"] = formation_origine
+        if reorientation:
+            query["formation_origine.type"] = "reorientation"
+        if situation_particuliere:
+            query["situation_particulier"] = True
+
+        return query
+
+    def export_visiteurs_csv(self, search=None, departement=None, formation_origine=None, reorientation=False, situation_particuliere=False) -> str:
+        query = self._build_query(search, departement, formation_origine, reorientation, situation_particuliere)
+        visiteurs = mongo.db.visiteurs.find(query)
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        writer.writerow([
+            "nom", "prenom", "email", "telephone",
+            "date_de_naissance", "formation_interessee",
+            "type_evenement", "date_visite",
+            "etablissement", "ville",
+            "immersion_souhaitee", "immersion_statut",
+            "consentement_collecte", "consentement_contact",
+            "source_saisie", "statut", "annee_campagne", "created_at"
+        ])
+
+        for v in visiteurs:
+            evenement  = v.get("evenement", {})
+            immersion  = v.get("immersion", {})
+            rgpd       = v.get("rgpd", {})
+            meta       = v.get("meta", {})
+            etab       = v.get("établisement_d'origine", {})
+            adresse    = v.get("adresse", {})
+
+            date_naissance = v.get("date_de_naissance")
+            date_visite    = evenement.get("date_visite")
+            created_at     = meta.get("created_at")
+
+            writer.writerow([
+                v.get("nom", ""),
+                v.get("prenom", ""),
+                v.get("email", ""),
+                v.get("telephone", ""),
+                date_naissance.strftime("%Y-%m-%d") if date_naissance else "",
+                v.get("formation_interessee", ""),
+                evenement.get("type", ""),
+                date_visite.strftime("%Y-%m-%d %H:%M") if date_visite else "",
+                etab.get("nom", ""),
+                adresse.get("ville", ""),
+                immersion.get("souhaite_participer", ""),
+                immersion.get("statut", ""),
+                rgpd.get("consentement_collecte", ""),
+                rgpd.get("consentement_contact", ""),
+                meta.get("source_saisie", ""),
+                meta.get("statut", ""),
+                meta.get("annee_campagne", ""),
+                created_at.strftime("%Y-%m-%d %H:%M") if created_at else "",
+            ])
+
+        return output.getvalue()
+
+    def export_emails_csv(self, search=None, departement=None, formation_origine=None, reorientation=False, situation_particuliere=False) -> str:
+        query = self._build_query(search, departement, formation_origine, reorientation, situation_particuliere)
+        visiteurs = mongo.db.visiteurs.find(query)
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+
+        writer.writerow(["email"])
+
+        for v in visiteurs:
+            writer.writerow([v.get("email", "")])
+
+        return output.getvalue()
