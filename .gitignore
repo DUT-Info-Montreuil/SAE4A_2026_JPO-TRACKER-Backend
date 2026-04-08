@@ -3,3 +3,4 @@
 .venv
 .idea
 seeds/
+generate_hash.py
