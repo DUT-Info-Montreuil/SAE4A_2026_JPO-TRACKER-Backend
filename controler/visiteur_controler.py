@@ -25,7 +25,7 @@ def get_filtrer():
     situation_particuliere = request.args.get("situationParticuliere") == "true"
     page = int(request.args.get("page", 1))
     limit = int(request.args.get("limit", 10))
-    visiteurs, total = service.get_filtrer(
+    visiteurs, total = service.get_filtered(
         search,
         departement,
         formation_origine,
