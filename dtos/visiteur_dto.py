@@ -35,12 +35,14 @@ class VisiteurLongDTO:
             "meta": self.meta
         }
 class VisiteurShortDTO:
-    def __init__(self, id, nom, prenom, email, formation_interessee, evenement, statut):
+    def __init__(self, id, nom, prenom, email, formation_interessee, evenement, statut, adresse, formation_origine):
         self.id = id
         self.nom = nom
         self.prenom = prenom
         self.email = email
         self.formation_interessee = formation_interessee
+        self.adresse = adresse
+        self.formation_origine = formation_origine
         self.evenement = evenement
         self.statut = statut
 
@@ -51,6 +53,8 @@ class VisiteurShortDTO:
             "prenom": self.prenom,
             "email": self.email,
             "formation_interessee": self.formation_interessee,
+            "adresse": self.adresse,
+            "formation_origine": self.formation_origine,
             "evenement": self.evenement,
             "statut": self.statut
         }

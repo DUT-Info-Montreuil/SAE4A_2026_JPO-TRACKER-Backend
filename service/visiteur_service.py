@@ -12,6 +12,8 @@ def _map_short(u):
         prenom=u.get("prenom", ""),
         email=u.get("email", ""),
         formation_interessee=u.get("formation_interessee", ""),
+        adresse=u.get("adresse", {}),
+        formation_origine=u.get("formation_origine", {}),
         evenement=u.get("evenement", {}),
         statut=u.get("meta", {}).get("statut", "")
     ).to_dict()
