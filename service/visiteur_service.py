@@ -137,3 +137,7 @@ class VisiteurService:
     def delete(self, visiteur_id):
         result = mongo.db.visiteurs.delete_one({"_id": ObjectId(visiteur_id)})
         return result.deleted_count > 0
+
+    def delete_visiteur(self):
+        result = mongo.db.visiteurs.delete_many({})
+        return result.deleted_count
