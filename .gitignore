@@ -5,3 +5,4 @@
 seeds/
 __pycache__/
 *.pyc
+generate_hash.py
