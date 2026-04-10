@@ -62,9 +62,9 @@ def create():
         "prenom",
         "email",
         "date_de_naissance",
-        "situation_particulier",
+        "situation_particuliere",
         "formation_origine",
-        "etablissement_origine",
+        "établisement_d'origine",
         "adresse",
         "formation_interessee"
     ]

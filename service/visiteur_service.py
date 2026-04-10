@@ -27,9 +27,9 @@ def _map_long(u):
         "email": u.get("email", ""),
         "telephone": u.get("telephone", ""),
         "date_de_naissance": u.get("date_de_naissance"),
-        "situation_particulier": u.get("situation_particulier", False),
+        "situation_particuliere": u.get("situation_particuliere", False),
         "formation_origine": u.get("formation_origine", {}),
-        "etablissement_origine": u.get("etablissement_origine", {}),
+        "établisement_d'origine": u.get("établisement_d'origine", {}),
         "adresse": u.get("adresse", {}),
         "formation_interessee": u.get("formation_interessee", ""),
         "evenement": u.get("evenement", {}),
@@ -67,7 +67,7 @@ class VisiteurService:
         if reorientation:
             query["formation_origine.type"] = "reorientation"
         if situation_particuliere:
-            query["situation_particulier"] = True
+            query["situation_particuliere"] = True
 
         return self.pagination(query, page, limit)
 
@@ -101,9 +101,9 @@ class VisiteurService:
             "email": data["email"],
             "telephone": data.get("telephone", ""),
             "date_de_naissance": data.get("date_de_naissance"),
-            "situation_particulier": data.get("situation_particulier", False),
+            "situation_particuliere": data.get("situation_particuliere", False),
             "formation_origine": data.get("formation_origine", {}),
-            "etablissement_origine": data.get("etablissement_origine", {}),
+            "établisement_d'origine": data.get("établisement_d'origine", {}),
             "adresse": data.get("adresse", {}),
             "formation_interessee": data.get("formation_interessee", ""),
             "evenement": data.get("evenement", {}),
